@@ -1,0 +1,1 @@
+Bienvenido al repositorio para la Librería Nova. Aquí encontrarás una colección de archivos necesarios para la ejecución del Frontend.
