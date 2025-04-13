@@ -20,6 +20,10 @@ export const routes: Routes = [
                 loadComponent: () => import('./views/generos/generos.component')
             },
             {
+                path: 'editoriales',
+                loadComponent: () => import('./views/editoriales/editoriales.component')
+            },
+            {
                 path: '',
                 redirectTo: 'usuarios',
                 pathMatch: 'full'
