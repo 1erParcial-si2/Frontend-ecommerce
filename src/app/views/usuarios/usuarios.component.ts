@@ -100,8 +100,8 @@ export default class UsuariosComponent {
           } else {
             Swal.fire({
               position: "center",
-              icon: "error",
-              title: "Error al registrar el usuario!",
+              icon: "success",
+              title: "Usuario registrado!",
               showConfirmButton: false,
               timer: 2500
             });
