@@ -23,6 +23,11 @@ export const routes: Routes = [
                 path: 'editoriales',
                 loadComponent: () => import('./views/editoriales/editoriales.component')
             },
+
+            {
+                path: 'categorias',
+                loadComponent: () => import('./views/categorias/categorias.component')
+            },
             {
                 path: '',
                 redirectTo: 'usuarios',
