@@ -12,22 +12,38 @@ import { NgIf } from '@angular/common';
 export class HeaderComponent {
   mostrarSesion = false;
   username: string | null = null;
+  user: string | null = null;
 
   constructor(private authService: AuthService) {
-    this.obtenerUsuario();
+    if (typeof window !== 'undefined') {
+      this.user = window.sessionStorage.getItem('user');
+      if (this.user) {
+        try {
+          const userObj = JSON.parse(this.user);
+          this.username = userObj.username;
+          if (this.username?.includes('@')) {
+            this.username = this.username.split('@')[0];
+          }
+        } catch (e) {
+          console.error("Error al parsear el usuario:", e);
+        }
+      }
+    }
   }
 
   obtenerUsuario() {
-    const user = sessionStorage.getItem('user');
-    if (user) {
-      try {
-        const userObj = JSON.parse(user);
-        this.username = userObj.username;
-        if (this.username && this.username.includes('@')) {
-          this.username = this.username.split('@')[0];
+    if (typeof window !== 'undefined') {
+      const user = window.sessionStorage.getItem('user');
+      if (user) {
+        try {
+          const userObj = JSON.parse(user);
+          this.username = userObj.username;
+          if (this.username && this.username.includes('@')) {
+            this.username = this.username.split('@')[0];
+          }
+        } catch (error) {
+          console.error("Error al parsear el usuario: ", error);
         }
-      } catch (error) {
-        console.error("Error al parsear el usuario: ", error);
       }
     }
   }

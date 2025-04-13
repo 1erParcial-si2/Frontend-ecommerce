@@ -22,6 +22,9 @@ export default class UsuariosComponent {
   isModalUpdateUserOpen: boolean = false;
   username: any;
   password: any;
+  email: any;
+  telefono: any;
+  direccion: any;
   selectedRole: any = "";
   roles: Array<any>;
   users: Array<any> = [];
@@ -76,7 +79,7 @@ export default class UsuariosComponent {
             this.getUsers();
 
             Swal.fire({
-              position: "top-end",
+              position: "center",
               icon: "success",
               title: "Usuario registrado!",
               showConfirmButton: false,
@@ -88,7 +91,7 @@ export default class UsuariosComponent {
             }, 2600);
           } else {
             Swal.fire({
-              position: "top-end",
+              position: "center",
               icon: "error",
               title: "Error al registrar el usuario!",
               showConfirmButton: false,
