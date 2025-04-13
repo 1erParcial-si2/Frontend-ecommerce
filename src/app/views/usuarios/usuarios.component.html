@@ -102,7 +102,8 @@
     <div class="bg-white rounded-lg shadow-lg w-11/12 sm:w-96 p-6">
         <div class="flex justify-between items-center mb-4">
             <h2 class="text-xl font-bold text-blue-gray-900">Registrar Usuario</h2>
-            <button id="closeModalBtn" class="text-gray-600 text-2xl font-semibold hover:text-gray-900">&times;</button>
+            <button (click)="closeRegisterUserModal()" id="closeModalBtn"
+                class="text-gray-600 text-2xl font-semibold hover:text-gray-900">&times;</button>
         </div>
 
         <form (submit)="registerUser()" class="space-y-4">
@@ -111,7 +112,7 @@
                 <label for="username" class="block text-sm font-medium text-gray-700">Nombre Completo</label>
                 <input type="text" id="username" [(ngModel)]="username" name="username"
                     class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
-                    required minlength="4" maxlength="12" />
+                    required />
             </div>
 
             <div>
@@ -132,7 +133,7 @@
                 <label for="telefono" class="block text-sm font-medium text-gray-700">Teléfono</label>
                 <input type="text" id="telefono" [(ngModel)]="telefono" name="telefono"
                     class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
-                    required />
+                    required minlength="8" maxlength="8" />
             </div>
 
             <div>
@@ -167,16 +168,17 @@
     <div class="bg-white rounded-lg shadow-lg w-11/12 sm:w-96 p-6">
         <div class="flex justify-between items-center mb-4">
             <h2 class="text-xl font-bold text-blue-gray-900">Actualizar Usuario</h2>
-            <button id="closeModalBtn" class="text-gray-600 text-2xl font-semibold hover:text-gray-900">&times;</button>
+            <button (click)="closeUpdateUserModal()" id="closeModalBtn"
+                class="text-gray-600 text-2xl font-semibold hover:text-gray-900">&times;</button>
         </div>
 
         <form (submit)="updateUser()" class="space-y-4">
 
             <div>
-                <label for="username" class="block text-sm font-medium text-gray-700">Nombre de Usuario</label>
+                <label for="username" class="block text-sm font-medium text-gray-700">Nombre Completo</label>
                 <input type="text" id="usernameUpdate" [(ngModel)]="usernameUpdate" name="usernameUpdate"
                     class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
-                    required minlength="4" maxlength="12" />
+                    required minlength="4" />
             </div>
 
             <div>
@@ -187,12 +189,33 @@
             </div>
 
             <div>
+                <label for="email" class="block text-sm font-medium text-gray-700">E-mail</label>
+                <input type="email" id="emailUpdate" [(ngModel)]="emailUpdate" name="emailUpdate"
+                    class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                    required minlength="4" />
+            </div>
+
+            <div>
+                <label for="telefono" class="block text-sm font-medium text-gray-700">Teléfono</label>
+                <input type="text" id="telefonoUpdate" [(ngModel)]="telefonoUpdate" name="telefonoUpdate"
+                    class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                    required minlength="8" maxlength="8" />
+            </div>
+
+            <div>
+                <label for="direccion" class="block text-sm font-medium text-gray-700">Dirección</label>
+                <input type="text" id="direccionUpdate" [(ngModel)]="direccionUpdate" name="direccionUpdate"
+                    class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                    required minlength="4" />
+            </div>
+
+            <div>
                 <label for="roleUpdate" class="block text-sm font-medium text-gray-700">Rol</label>
                 <select id="roleUpdate" [(ngModel)]="roleUpdate" (ngModelChange)="updateRoleId($event)"
                     name="roleUpdate"
                     class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
                     required>
-                    <option *ngFor="let role of roles" [value]="role.id">{{ role.name }}</option>
+                    <option *ngFor="let role of roles" [value]="role.id">{{ role.nombre }}</option>
                 </select>
             </div>
 

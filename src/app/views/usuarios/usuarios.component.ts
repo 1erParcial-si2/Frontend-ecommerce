@@ -30,6 +30,9 @@ export default class UsuariosComponent {
   users: Array<any> = [];
   usernameUpdate: any;
   passwordUpdate: any;
+  emailUpdate: any;
+  telefonoUpdate: any;
+  direccionUpdate: any;
   roleUpdate: any;
   userIdSelected: any;
 
@@ -60,21 +63,26 @@ export default class UsuariosComponent {
 
   }
 
-  registerUser() {
-
+  registerUsers() {
+    const selectedRoleObj = this.roles.find(r => r.id === +this.selectedRole);
+    const permiso = selectedRoleObj?.permisos[0];
     let user = {
-      username: this.username,
+      nombre_completo: this.username,
       password: this.password,
-      role: {
-        id: this.selectedRole
-      }
+      email: this.email,
+      telefono: this.telefono,
+      direccion: this.direccion,
+      // rol: { id: this.selectedRole  },
+      rol: this.selectedRole,
+      // permisos: { id: permiso?.id }
+      permisos: permiso,
     };
 
     this.userService.registerUser(user).subscribe(
       {
         next: (resp: any) => {
           console.log(resp);
-          if (resp.id || resp.id >= 1) {
+          if (resp.user_id || resp.user_id >= 1) {
 
             this.getUsers();
 
@@ -108,6 +116,57 @@ export default class UsuariosComponent {
     );
   }
 
+  registerUser() {
+    let user = {
+      nombre_completo: this.username,
+      password: this.password,
+      email: this.email,
+      telefono: this.telefono,
+      direccion: this.direccion,
+      rol: this.selectedRole
+    };
+
+    this.userService.registerUser(user).subscribe(
+      {
+        next: (resp: any) => {
+          console.log(resp);
+          if (resp.id || resp.id >= 1) {
+            this.getUsers();
+            Swal.fire({
+              position: "center",
+              icon: "success",
+              title: "Usuario registrado!",
+              showConfirmButton: false,
+              timer: 2500
+            });
+            setTimeout(() => {
+              this.closeRegisterUserModal();
+            }, 2600);
+          } else {
+            Swal.fire({
+              position: "center",
+              icon: "error",
+              title: "Error al registrar el usuario!",
+              showConfirmButton: false,
+              timer: 2500
+            });
+          }
+        },
+        error: (error: any) => {
+          console.log('Error al registrar usuario:', error);
+          Swal.fire({
+            position: "center",
+            icon: "error",
+            title: "Error al registrar el usuario!",
+            showConfirmButton: false,
+            timer: 2500
+          });
+        }
+      }
+    );
+  }
+
+
   getUsers() {
 
     this.userService.getUsers().subscribe(
@@ -125,23 +184,30 @@ export default class UsuariosComponent {
   }
 
   openModalToUpdateUser(user: any) {
-    console.log(user);
-
+    console.log('user id: ' + user.id);
     this.isModalUpdateUserOpen = true;
     this.usernameUpdate = user.username;
     this.passwordUpdate = user.password;
+    this.emailUpdate = user.email;
+    this.telefonoUpdate = user.telefono;
+    this.direccionUpdate = user.direccion;
     this.roleUpdate = user.role.id;
     this.userIdSelected = user.id;
   }
 
   updateUser() {
-
+    const selectedRoleObj = this.roles.find(r => r.id === +this.roleUpdate);
+    const permiso = selectedRoleObj?.permisos[0];
     let userData = {
-      username: this.usernameUpdate,
+      nombre_completo: this.usernameUpdate,
       password: this.passwordUpdate,
-      role: {
-        id: this.roleUpdate
-      }
+      email: this.emailUpdate,
+      telefono: this.telefonoUpdate,
+      direccion: this.direccionUpdate,
+      // rol: { id: this.roleUpdate },
+      rol: this.selectedRole,
+      // permisos: { id: permiso?.id }
+      permisos: permiso,
     };
 
     this.userService.updateUser(this.userIdSelected, userData).subscribe(
@@ -151,7 +217,7 @@ export default class UsuariosComponent {
           if (resp) {
             this.getUsers();
             Swal.fire({
-              position: "top-end",
+              position: "center",
               icon: "success",
               title: "Usuario actualizado!",
               showConfirmButton: false,
@@ -181,7 +247,7 @@ export default class UsuariosComponent {
           console.log(resp);
           this.getUsers();
           Swal.fire({
-            position: "top-end",
+            position: "center",
             icon: "success",
             title: "Usuario eliminado!",
             showConfirmButton: false,
