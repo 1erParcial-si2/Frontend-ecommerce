@@ -16,6 +16,10 @@ export const routes: Routes = [
                 loadComponent: () => import('./views/autores/autores.component')
             },
             {
+                path: 'generos',
+                loadComponent: () => import('./views/generos/generos.component')
+            },
+            {
                 path: '',
                 redirectTo: 'usuarios',
                 pathMatch: 'full'
