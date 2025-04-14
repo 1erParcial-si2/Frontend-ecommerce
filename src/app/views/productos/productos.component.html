@@ -1,70 +1,158 @@
 <div class="mb-4 grid grid-cols-1 gap-6 xl:grid-cols-3">
     <div
         class="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md overflow-hidden xl:col-span-2">
+        <div
+            class="relative bg-clip-border rounded-xl overflow-hidden bg-transparent text-gray-700 shadow-none m-0 flex items-center justify-between p-6">
+            <div>
+                <h2
+                    class="block antialiased tracking-normal font-sans text-base font-bold leading-relaxed text-blue-gray-900 mb-1">
+                    Producto</h2>
+
+            </div>
+        </div>
         <div class="p-6 overflow-x-scroll px-0 pt-0 pb-2">
-            <!-- Lista de productos -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div *ngFor="let producto of productos"
-                    class="relative flex w-full max-w-[26rem] flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-lg">
-                    <!-- <div
-                        class="relative mx-4 mt-4 overflow-hidden text-white shadow-lg rounded-xl bg-blue-gray-500 bg-clip-border shadow-blue-gray-500/40">
-                        <img [src]="producto.imagenUrl || 'https://images.unsplash.com/photo-1499696010180-025ef6e1a8f9?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1470&amp;q=80'"
-                            alt="Producto" class="w-full h-48 object-cover" />
-                        <div
-                            class="absolute inset-0 w-full h-full to-bg-black-10 bg-gradient-to-tr from-transparent via-transparent to-black/60">
-                        </div>
-                        <button
-                            class="!absolute top-4 right-4 h-8 w-8 rounded-full text-center text-red-500 hover:bg-red-500/10 active:bg-red-500/30"
-                            type="button">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-6 h-6"
-                                viewBox="0 0 24 24">
+
+            <table class="w-full min-w-[640px] table-auto">
+                <thead>
+                    <tr>
+                        <th class="border-b border-blue-gray-50 py-3 px-6 text-left">
+                            <p class="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">
+                                ID</p>
+                        </th>
+                        <th class="border-b border-blue-gray-50 py-3 px-6 text-left">
+                            <p class="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">
+                                Nombre del Producto</p>
+                        </th>
+                        <th class="border-b border-blue-gray-50 py-3 px-6 text-left">
+                            <p class="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">
+                                Descripcion del Producto</p>
+                        </th>
+                        <th class="border-b border-blue-gray-50 py-3 px-6 text-left">
+                            <p class="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">
+                                Precio del Producto</p>
+                        </th>
+                        <th class="border-b border-blue-gray-50 py-3 px-6 text-left">
+                            <p class="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">
+                                Acción</p>
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr *ngFor="let producto of productos">
+                        <td class="py-3 px-5 border-b border-blue-gray-50">
+                            <p class="block antialiased font-sans text-xs font-medium text-blue-gray-600">{{ producto.id
+                                }}
+                            </p>
+                        </td>
+                        <td class="py-3 px-5 border-b border-blue-gray-50">
+                            <p class="block antialiased font-sans text-xs font-medium text-blue-gray-600">{{
+                                producto.nombre }}</p>
+                        </td>
+                        <td class="py-3 px-5 border-b border-blue-gray-50">
+                            <p class="block antialiased font-sans text-xs font-medium text-blue-gray-600">{{
+                                producto.descripcion }}</p>
+                        </td>
+                        <td class="py-3 px-5 border-b border-blue-gray-50">
+                            <p class="block antialiased font-sans text-xs font-medium text-blue-gray-600">{{
+                                producto.precio }}</p>
+                        </td>
+                        <!-- <td class="py-3 px-5 border-b border-blue-gray-50">
+                            <p class="block antialiased font-sans text-xs font-medium text-blue-gray-600">{{
+                                producto.genero.nombre }}</p>
+                        </td>
+                        <td class="py-3 px-5 border-b border-blue-gray-50">
+                            <p class="block antialiased font-sans text-xs font-medium text-blue-gray-600">{{
+                                producto.editorial.nombre }}</p>
+                        </td>
+                        <td class="py-3 px-5 border-b border-blue-gray-50">
+                            <p class="block antialiased font-sans text-xs font-medium text-blue-gray-600">{{
+                                producto.autor.nombre }}</p>
+                        </td>
+                        <td class="py-3 px-5 border-b border-blue-gray-50">
+                            <p class="block antialiased font-sans text-xs font-medium text-blue-gray-600">{{
+                                producto.subcategoria.nombre }}</p>
+                        </td> -->
+                        <td class="py-3 px-5 border-b border-blue-gray-50">
+                            <svg (click)="openModalToUpdateproducto(nombre)" xmlns="http://www.w3.org/2000/svg"
+                                height="24px" viewBox="0 -960 960 960" width="24px" fill="#008080">
                                 <path
-                                    d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z">
-                                </path>
+                                    d="M560-120v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T903-340L683-120H560Zm-400-40v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q37 0 73 4.5t72 14.5L480-276v116H160Zm663-184 37-39-37-37-38 38 38 38ZM480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47Z" />
                             </svg>
-                        </button>
-                    </div> -->
-                    <div
-                        class="relative mx-4 mt-4 overflow-hidden text-white shadow-lg rounded-xl bg-blue-gray-500 bg-clip-border shadow-blue-gray-500/40">
-
-                        <!-- Imagen del producto -->
-                        <img [src]="producto.imagenUrl || 'https://images.unsplash.com/photo-1499696010180-025ef6e1a8f9?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1470&amp;q=80'"
-                            alt="Producto" class="w-full h-48 object-cover" />
-
-                        <!-- Capa de gradiente encima de la imagen -->
-                        <div
-                            class="absolute inset-0 w-full h-full bg-gradient-to-tr from-transparent via-transparent to-black/60">
-                        </div>
-
-                        <!-- Botón del corazón arriba a la derecha -->
-                        <button
-                            class="absolute top-4 right-4 h-8 w-8 rounded-full text-red-500 hover:bg-red-500/10 transition-all"
-                            type="button">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"
-                                class="w-6 h-6">
+                            <svg (click)="deleteProducto(nombre)" xmlns="http://www.w3.org/2000/svg" height="24px"
+                                viewBox="0 -960 960 960" width="24px" fill="#dc4340">
                                 <path
-                                    d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z">
-                                </path>
+                                    d="m696-440-56-56 83-84-83-83 56-57 84 84 83-84 57 57-84 83 84 84-57 56-83-83-84 83Zm-336-40q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM40-160v-112q0-34 17.5-62.5T104-378q62-31 126-46.5T360-440q66 0 130 15.5T616-378q29 15 46.5 43.5T680-272v112H40Z" />
                             </svg>
-                        </button>
-                    </div>
+                        </td>
+                    </tr>
+                </tbody>
 
-                    <div class="p-6">
-                        <div class="flex items-center justify-between mb-3">
-                            <p class="text-xl font-bold text-blue-gray-900">{{ producto.nombre }}</p>
-                            <p class="text-base font-medium text-blue-gray-900">Bs. {{ producto.precio }}</p>
-                        </div>
-                        <p class="text-base font-light text-gray-700">{{ producto.descripcion }}</p>
-                    </div>
-                    <div class="p-6 pt-3">
-                        <button
-                            class="w-full rounded-lg bg-gray-900 py-3.5 px-7 text-sm font-bold uppercase text-white hover:shadow-lg"
-                            type="button">
-                            Agregar al carrito
-                        </button>
-                    </div>
-                </div>
+            </table>
+            <!-- BOTON PARA REGISTRAR UN NUEVO PRODUCTO -->
+            <div class="p-6 pt-3">
+                <button (click)="activeRegisterForm()" type="button"
+                    class="appearance-none block bg-blue-700 text-gray-100 font-bold border border-gray-200 rounded-lg py-3 px-3 leading-tight hover:bg-blue-600 focus:outline-none focus:bg-white focus:border-gray-500">Agregar
+                    Nuevo Producto</button>
             </div>
         </div>
     </div>
-</div>
+
+    <!-- MODAL PARA REGISTRAR -->
+    <div *ngIf="isModalRegisterProductoOpen"
+        class="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
+        <div class="bg-white rounded-lg shadow-lg w-11/12 sm:w-96 p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold text-blue-gray-900">Registrar Producto</h2>
+                <button (click)="closeRegisterProductoModal()" id="closeModalBtn"
+                    class="text-gray-600 text-2xl font-semibold hover:text-gray-900">&times;</button>
+            </div>
+
+            <form (submit)="createProducto()" class="space-y-4">
+                <div>
+                    <label for="producto" class="block text-sm font-medium text-gray-700">Nombre del Producto</label>
+                    <input type="text" id="producto" [(ngModel)]="nombre" name="producto"
+                        class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                        required />
+                </div>
+                <div class="flex justify-between mt-6">
+                    <button (click)="closeRegisterProductoModal()" type="button" id="closeModalBtn"
+                        class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 focus:outline-none">Cancelar</button>
+                    <button type="submit"
+                        class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-500 focus:outline-none">Registrar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- VENTANA EMERGENTE PARA ACTUALIZAR LOS DATOS DE UNO -->
+    <div *ngIf="isModalUpdateProductoOpen"
+        class="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
+        <div class="bg-white rounded-lg shadow-lg w-11/12 sm:w-96 p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold text-blue-gray-900">Actualizar Usuario</h2>
+                <button (click)="closeUpdateProductoModal()" id="closeModalBtn"
+                    class="text-gray-600 text-2xl font-semibold hover:text-gray-900">&times;</button>
+            </div>
+
+            <form (submit)="updateproducto()" class="space-y-4">
+
+                <div>
+                    <label for="producto" class="block text-sm font-medium text-gray-700">Nombre del Producto</label>
+                    <input type="text" id="updateNombre" [(ngModel)]="nombre" name="updateNombre"
+                        class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                        required />
+                </div>
+
+                <div class="flex justify-between mt-6">
+                    <button type="button" (click)="closeUpdateProductoModal()"
+                        class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 focus:outline-none">
+                        Cancelar
+                    </button>
+                    <button type="submit"
+                        class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-500 focus:outline-none">
+                        Actualizar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
