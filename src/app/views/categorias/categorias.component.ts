@@ -39,7 +39,7 @@ export default class CategoriasComponent {
     });
   }
 
-  createCategoria(): void {
+  XcreateCategoria(): void {
     if (!this.nuevoCategoria.nombre.trim()) return;
     this.categoriaService.createCategoria(this.nuevoCategoria).subscribe({
       next: (data) => {
@@ -81,7 +81,7 @@ export default class CategoriasComponent {
     this.categoriaIdSelected = categoria.id;
   }
 
-  updateCategoria() {
+  XupdateCategoria() {
     let categoriaData = {
       nombre: this.categoriaUpdate,
     };
@@ -108,6 +108,75 @@ export default class CategoriasComponent {
         error: (error: any) => {
           console.log(error);
 
+        }
+      }
+    );
+  }
+
+  createCategoria(): void {
+    if (!this.nuevoCategoria.nombre.trim()) return;
+
+    const subcategoriaPayload = {
+      nombre: this.nuevoCategoria.nombre.trim(),
+      categoria: 1 //por defecto
+    };
+
+    this.categoriaService.createCategoria(subcategoriaPayload).subscribe({
+      next: (data) => {
+        this.categorias.push(data);
+        this.nuevoCategoria = { nombre: '' };
+        this.getCategorias();
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Categoria registrada!",
+          showConfirmButton: false,
+          timer: 2500
+        });
+        setTimeout(() => {
+          this.closeRegisterCategoriaModal();
+        }, 2600);
+      },
+      error: (error: any) => {
+        console.log('Error al registrar la categoria:', error);
+        Swal.fire({
+          position: "center",
+          icon: "error",
+          title: "Error al registrar la categoria!",
+          showConfirmButton: false,
+          timer: 2500
+        });
+      }
+    });
+  }
+
+  updateCategoria() {
+    const categoriaData = {
+      nombre: this.categoriaUpdate.trim(),
+      categoria: 1 // pertenece a la categoría por defecto
+    };
+
+    this.categoriaService.updateCategoria(this.categoriaIdSelected, categoriaData).subscribe(
+      {
+        next: (resp: any) => {
+          console.log(resp);
+          if (resp) {
+            this.getCategorias();
+            Swal.fire({
+              position: "center",
+              icon: "success",
+              title: "Categoria actualizada!",
+              showConfirmButton: false,
+              timer: 2500
+            });
+
+            setTimeout(() => {
+              this.closeUpdateCategoriaModal();
+            }, 2600);
+          }
+        },
+        error: (error: any) => {
+          console.log(error);
         }
       }
     );

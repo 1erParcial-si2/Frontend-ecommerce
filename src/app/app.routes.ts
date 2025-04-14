@@ -23,7 +23,10 @@ export const routes: Routes = [
                 path: 'editoriales',
                 loadComponent: () => import('./views/editoriales/editoriales.component')
             },
-
+            {
+                path: 'productos',
+                loadComponent: () => import('./views/productos/productos.component')
+            },
             {
                 path: 'categorias',
                 loadComponent: () => import('./views/categorias/categorias.component')
