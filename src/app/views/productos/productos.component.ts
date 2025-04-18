@@ -7,11 +7,14 @@ import { AutoresService } from '../../core/services/autores.service';
 import { GenerosService } from '../../core/services/generos.service';
 import { CategoriasService } from '../../core/services/categorias.service'; // Este servicio en realidad maneja subcategorías
 import { EditorialesService } from '../../core/services/editoriales.service';
+import { ImgDropService } from '../../core/services/img-drop.service';
+import { NgxDropzoneModule } from 'ngx-dropzone';
+import { map, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-productos',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, NgxDropzoneModule],
   templateUrl: './productos.component.html',
   styleUrl: './productos.component.css'
 })
@@ -50,7 +53,8 @@ export default class ProductosComponent {
     private autoresService: AutoresService,
     private generosService: GenerosService,
     private editorialesService: EditorialesService,
-    private categoriasService: CategoriasService // Este en realidad es para subcategorías
+    private categoriasService: CategoriasService, // Este en realidad es para subcategorías
+    private imgdropService: ImgDropService
   ) {
     this.getProductos();
     this.getAutores();
@@ -58,6 +62,32 @@ export default class ProductosComponent {
     this.getEditoriales();
     this.getSubcategorias(); // Renombrado
   }
+
+  files: File[] = [];
+
+  onSelect(event: any) {
+    console.log(event);
+    this.files.push(...event.addedFiles);
+  }
+
+  onRemove(event: any) {
+    console.log(event);
+    this.files.splice(this.files.indexOf(event), 1);
+  }
+
+  upload(): Observable<string> {
+    const file_data = this.files[0];
+    const data = new FormData();
+
+    data.append('file', file_data);
+    data.append('upload_preset', 'nova-library');
+    data.append('cloud_name', 'day1tsmdn');
+
+    return this.imgdropService.uploadImg(data).pipe(
+      map((response: any) => response.secure_url)
+    );
+  }
+
 
   getProductos(): void {
     this.productoService.getProductos().subscribe({
@@ -98,58 +128,122 @@ export default class ProductosComponent {
     });
   }
 
-  createProducto() {
-    const producto = {
-      nombre: this.nombre,
-      descripcion: this.descripcion,
-      imagen: this.imagen,
-      precio: this.precio,
-      genero: this.selectedGenero,
-      editorial: this.selectedEditorial,
-      autor: this.selectedAutor,
-      subcategoria: this.selectedSubcategoria,
-      categoria: 1 // Fijo por diseño
-    };
+  // XcreateProducto() {
+  //   const producto = {
+  //     nombre: this.nombre,
+  //     descripcion: this.descripcion,
+  //     imagen: this.imagen,
+  //     precio: this.precio,
+  //     genero: this.selectedGenero,
+  //     editorial: this.selectedEditorial,
+  //     autor: this.selectedAutor,
+  //     subcategoria: this.selectedSubcategoria,
+  //     categoria: 1 // Fijo por diseño
+  //   };
 
-    this.productoService.createProducto(producto).subscribe({
-      next: (resp: any) => {
-        if (resp.id || resp.id >= 1) {
-          this.getProductos();
-          Swal.fire({
-            position: "center",
-            icon: "success",
-            title: "Producto registrado!",
-            showConfirmButton: false,
-            timer: 2500
-          });
-          setTimeout(() => this.closeRegisterProductoModal(), 2600);
-        } else {
-          Swal.fire({
-            position: "center",
-            icon: "error",
-            title: "Error al registrar el Producto!",
-            showConfirmButton: false,
-            timer: 2500
-          });
+  //   this.productoService.createProducto(producto).subscribe({
+  //     next: (resp: any) => {
+  //       if (resp.id || resp.id >= 1) {
+  //         this.getProductos();
+  //         Swal.fire({
+  //           position: "center",
+  //           icon: "success",
+  //           title: "Producto registrado!",
+  //           showConfirmButton: false,
+  //           timer: 2500
+  //         });
+  //         setTimeout(() => this.closeRegisterProductoModal(), 2600);
+  //       } else {
+  //         Swal.fire({
+  //           position: "center",
+  //           icon: "error",
+  //           title: "Error al registrar el Producto!",
+  //           showConfirmButton: false,
+  //           timer: 2500
+  //         });
+  //       }
+  //     },
+  //     error: () => {
+  //       Swal.fire({
+  //         position: "center",
+  //         icon: "error",
+  //         title: "Error al registrar el Producto!",
+  //         showConfirmButton: false,
+  //         timer: 2500
+  //       });
+  //     }
+  //   });
+  // }
+  createProducto() {
+    if (this.files.length === 0) {
+      Swal.fire("Por favor selecciona una imagen");
+      return;
+    }
+    this.upload().subscribe({
+      next: (imgUrl: string) => {
+        const producto = {
+          nombre: this.nombre,
+          descripcion: this.descripcion,
+          imagen: imgUrl,
+          precio: this.precio.toString(),
+          genero: this.selectedGenero ? Number(this.selectedGenero) : 1,
+          editorial: this.selectedEditorial ? Number(this.selectedEditorial) : 1,
+          autor: this.selectedAutor ? Number(this.selectedAutor) : 1,
+          subcategoria: Number(this.selectedSubcategoria)
+        };
+
+        if (this.selectedSubcategoria === 1) {
+          producto.genero = 1;
+          producto.autor = 1;
+          producto.editorial = 1;
         }
-      },
-      error: () => {
-        Swal.fire({
-          position: "center",
-          icon: "error",
-          title: "Error al registrar el Producto!",
-          showConfirmButton: false,
-          timer: 2500
+        console.log(producto);
+        this.productoService.createProducto(producto).subscribe({
+          next: (resp: any) => {
+            if (resp.id || resp.id >= 1) {
+              this.getProductos();
+              Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "Producto registrado!",
+                showConfirmButton: false,
+                timer: 2500
+              });
+              setTimeout(() => this.closeRegisterProductoModal(), 2600);
+            } else {
+              Swal.fire({
+                position: "center",
+                icon: "error",
+                title: "Error al registrar el Producto!",
+                showConfirmButton: false,
+                timer: 2500
+              });
+            }
+          },
+          error: () => {
+            Swal.fire({
+              position: "center",
+              icon: "error",
+              title: "Error al registrar el Producto!",
+              showConfirmButton: false,
+              timer: 2500
+            });
+          }
         });
+      },
+      error: (e: any) => {
+        console.log(e);
+        Swal.fire("Error al subir la imagen");
       }
     });
   }
+
 
   activeRegisterForm() {
     this.isModalRegisterProductoOpen = true;
   }
 
-  openModalToUpdateproducto(producto: any) {
+  XopenModalToUpdateproducto(producto: any) {
     this.isModalUpdateProductoOpen = true;
     this.nombreUpdate = producto.nombre;
     this.descripcionUpdate = producto.descripcion;
@@ -161,18 +255,68 @@ export default class ProductosComponent {
     this.subcategoriaUpdate = producto.subcategoria?.id || producto.categoria?.id; // fallback si back devuelve mal
     this.productoIdSelected = producto.id;
   }
+  openModalToUpdateproducto(producto: any) {
+    console.log("Producto recibido:", producto);
+    if (!producto) {
+      console.error("Producto no definido");
+      return;
+    }
+    this.productoIdSelected = producto.id;
+    // Precargar los valores del producto
+    this.nombreUpdate = producto.nombre || '';
+    this.descripcionUpdate = producto.descripcion || '';
+    this.imagenUpdate = producto.imagen || '';
+    this.precioUpdate = producto.precio || '';
+
+    // Asegúrate de tener el ID correctamente accedido desde relaciones
+    this.subcategoriaUpdate = producto.subcategoria?.id || 1;
+    this.selectedGenero = producto.genero?.id || 1;
+    this.selectedAutor = producto.autor?.id || 1;
+    this.selectedEditorial = producto.editorial?.id || 1;
+
+    // Limpiar archivos seleccionados para nueva imagen (si había)
+    this.files = [];
+
+    // Finalmente, abrir el modal
+    this.isModalUpdateProductoOpen = true;
+  }
+
+
 
   updateproducto() {
+    // Si se subió una nueva imagen, la subimos primero
+    if (this.files.length > 0) {
+      this.upload().subscribe({
+        next: (imgUrl: string) => {
+          this.enviarActualizacion(imgUrl);
+        },
+        error: (e: any) => {
+          console.log(e);
+          Swal.fire("Error al subir la nueva imagen");
+        }
+      });
+    } else {
+      // Si no se subió una nueva imagen, usamos la imagen existente
+      this.enviarActualizacion(this.imagenUpdate);
+    }
+  }
+
+  enviarActualizacion(imgUrl: string) {
+    if (this.subcategoriaUpdate === 1) {
+      this.selectedGenero = 1;
+      this.selectedAutor = 1;
+      this.selectedEditorial = 1;
+    }
+
     const productoData = {
       nombre: this.nombreUpdate,
       descripcion: this.descripcionUpdate,
-      imagen: this.imagenUpdate,
+      imagen: imgUrl,
       precio: this.precioUpdate,
       genero: this.selectedGenero,
       editorial: this.selectedEditorial,
       autor: this.selectedAutor,
-      subcategoria: this.selectedSubcategoria,
-      categoria: 1
+      subcategoria: this.subcategoriaUpdate
     };
 
     this.productoService.updateProducto(this.productoIdSelected, productoData).subscribe({
@@ -189,7 +333,10 @@ export default class ProductosComponent {
           setTimeout(() => this.closeUpdateProductoModal(), 2600);
         }
       },
-      error: (error: any) => console.log(error)
+      error: (error: any) => {
+        console.log(error);
+        Swal.fire("Error al actualizar el producto");
+      }
     });
   }
 
@@ -215,5 +362,17 @@ export default class ProductosComponent {
 
   closeUpdateProductoModal() {
     this.isModalUpdateProductoOpen = false;
+    this.productoIdSelected = null;
+
+    // Reset de campos (si deseas)
+    this.nombreUpdate = '';
+    this.descripcionUpdate = '';
+    this.imagenUpdate = '';
+    this.precioUpdate = '';
+    this.subcategoriaUpdate = '';
+    this.selectedGenero = '';
+    this.selectedAutor = '';
+    this.selectedEditorial = '';
+    this.files = [];
   }
 }

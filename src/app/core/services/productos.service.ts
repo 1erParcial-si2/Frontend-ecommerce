@@ -11,6 +11,12 @@ export class ProductosService {
 
   constructor(private http: HttpClient) { }
 
+  url: string = 'https://api.cloudinary.com/v1_1/day1tsmdn/image/upload'
+
+  uploadImg(data: any): Observable<any> {
+    return this.http.post(this.url, data);
+  }
+
   getProductos(): Observable<any[]> {
     return this.http.get<any[]>(this.apiUrl);
   }
@@ -23,8 +29,11 @@ export class ProductosService {
     return this.http.put(this.apiUrl + `${productoId}/`, producto);
   }
 
-  getProducto(productoId: any, producto: any): Observable<any> {
-    return this.http.get(this.apiUrl + `${productoId}/`, producto);
+  // XgetProducto(productoId: any, producto: any): Observable<any> {
+  //   return this.http.get(this.apiUrl + `${productoId}/`, producto);
+  // }
+  getProducto(productoId: any): Observable<any> {
+    return this.http.get(this.apiUrl + `${productoId}/`);
   }
 
   deleteProducto(productoId: any): Observable<any> {
