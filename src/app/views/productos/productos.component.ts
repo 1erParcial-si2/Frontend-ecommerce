@@ -23,7 +23,7 @@ export default class ProductosComponent {
   generos: Array<any> = [];
   autores: Array<any> = [];
   editoriales: Array<any> = [];
-  subcategorias: Array<any> = []; // Renombrado
+  subcategorias: Array<any> = [];
 
   nombre: any;
   descripcion: any;
@@ -33,7 +33,7 @@ export default class ProductosComponent {
   selectedAutor: any = "";
   selectedGenero: any = "";
   selectedEditorial: any = "";
-  selectedSubcategoria: any = ""; // Renombrado
+  selectedSubcategoria: any = "";
 
   nombreUpdate: any;
   descripcionUpdate: any;
@@ -42,7 +42,7 @@ export default class ProductosComponent {
   generoUpdate: any;
   autorUpdate: any;
   editorialUpdate: any;
-  subcategoriaUpdate: any; // Renombrado
+  subcategoriaUpdate: any;
   productoIdSelected: any;
 
   isModalRegisterProductoOpen: boolean = false;
@@ -60,7 +60,7 @@ export default class ProductosComponent {
     this.getAutores();
     this.getGeneros();
     this.getEditoriales();
-    this.getSubcategorias(); // Renombrado
+    this.getSubcategorias();
   }
 
   files: File[] = [];
@@ -101,7 +101,7 @@ export default class ProductosComponent {
   }
 
   getSubcategorias() {
-    this.categoriasService.getCategorias().subscribe({ // Servicio realmente carga subcategorías
+    this.categoriasService.getCategorias().subscribe({
       next: (resp: any) => this.subcategorias = resp,
       error: (error: any) => console.log(error)
     });
@@ -128,52 +128,6 @@ export default class ProductosComponent {
     });
   }
 
-  // XcreateProducto() {
-  //   const producto = {
-  //     nombre: this.nombre,
-  //     descripcion: this.descripcion,
-  //     imagen: this.imagen,
-  //     precio: this.precio,
-  //     genero: this.selectedGenero,
-  //     editorial: this.selectedEditorial,
-  //     autor: this.selectedAutor,
-  //     subcategoria: this.selectedSubcategoria,
-  //     categoria: 1 // Fijo por diseño
-  //   };
-
-  //   this.productoService.createProducto(producto).subscribe({
-  //     next: (resp: any) => {
-  //       if (resp.id || resp.id >= 1) {
-  //         this.getProductos();
-  //         Swal.fire({
-  //           position: "center",
-  //           icon: "success",
-  //           title: "Producto registrado!",
-  //           showConfirmButton: false,
-  //           timer: 2500
-  //         });
-  //         setTimeout(() => this.closeRegisterProductoModal(), 2600);
-  //       } else {
-  //         Swal.fire({
-  //           position: "center",
-  //           icon: "error",
-  //           title: "Error al registrar el Producto!",
-  //           showConfirmButton: false,
-  //           timer: 2500
-  //         });
-  //       }
-  //     },
-  //     error: () => {
-  //       Swal.fire({
-  //         position: "center",
-  //         icon: "error",
-  //         title: "Error al registrar el Producto!",
-  //         showConfirmButton: false,
-  //         timer: 2500
-  //       });
-  //     }
-  //   });
-  // }
   createProducto() {
     if (this.files.length === 0) {
       Swal.fire("Por favor selecciona una imagen");
@@ -252,7 +206,7 @@ export default class ProductosComponent {
     this.generoUpdate = producto.genero.id;
     this.editorialUpdate = producto.editorial.id;
     this.autorUpdate = producto.autor.id;
-    this.subcategoriaUpdate = producto.subcategoria?.id || producto.categoria?.id; // fallback si back devuelve mal
+    this.subcategoriaUpdate = producto.subcategoria?.id || producto.categoria?.id;
     this.productoIdSelected = producto.id;
   }
   openModalToUpdateproducto(producto: any) {
@@ -262,13 +216,10 @@ export default class ProductosComponent {
       return;
     }
     this.productoIdSelected = producto.id;
-    // Precargar los valores del producto
     this.nombreUpdate = producto.nombre || '';
     this.descripcionUpdate = producto.descripcion || '';
     this.imagenUpdate = producto.imagen || '';
     this.precioUpdate = producto.precio || '';
-
-    // Asegúrate de tener el ID correctamente accedido desde relaciones
     this.subcategoriaUpdate = producto.subcategoria?.id || 1;
     this.selectedGenero = producto.genero?.id || 1;
     this.selectedAutor = producto.autor?.id || 1;
@@ -276,8 +227,6 @@ export default class ProductosComponent {
 
     // Limpiar archivos seleccionados para nueva imagen (si había)
     this.files = [];
-
-    // Finalmente, abrir el modal
     this.isModalUpdateProductoOpen = true;
   }
 
