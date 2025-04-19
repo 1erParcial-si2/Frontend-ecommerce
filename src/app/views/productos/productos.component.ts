@@ -45,6 +45,7 @@ export default class ProductosComponent {
   subcategoriaUpdate: any;
   productoIdSelected: any;
 
+  previewImageUrl: string | ArrayBuffer | null = null;
   isModalRegisterProductoOpen: boolean = false;
   isModalUpdateProductoOpen: boolean = false;
 
@@ -66,13 +67,22 @@ export default class ProductosComponent {
   files: File[] = [];
 
   onSelect(event: any) {
-    console.log(event);
+    this.files = []; // solo permite una imagen
     this.files.push(...event.addedFiles);
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.previewImageUrl = reader.result;
+    };
+
+    if (this.files[0]) {
+      reader.readAsDataURL(this.files[0]);
+    }
   }
 
-  onRemove(event: any) {
-    console.log(event);
-    this.files.splice(this.files.indexOf(event), 1);
+  onRemove(file: File): void {
+    this.files.splice(this.files.indexOf(file), 1);
+    this.previewImageUrl = null;
   }
 
   upload(): Observable<string> {

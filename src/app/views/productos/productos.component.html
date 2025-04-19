@@ -213,8 +213,8 @@
                 <div>
                     <label for="imagen" class="block text-sm font-medium text-gray-700">Imagen del Producto</label>
                     <div class="mb-4">
-                        <label class="block text-xs font-medium text-gray-700">Imagen Actual:</label>
-                        <img [src]="imagenUpdate" alt="Producto" class="max-w-full max-h-60 rounded mt-2 mx-auto" />
+                        <img [src]="previewImageUrl ? previewImageUrl : imagenUpdate" alt="Producto"
+                            class="max-w-full max-h-60 rounded mt-2 mx-auto" />
                     </div>
                     <ngx-dropzone (change)="onSelect($event)">
                         <ngx-dropzone-label>Agrega la nueva imagen aqui</ngx-dropzone-label>
