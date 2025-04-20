@@ -150,17 +150,19 @@ export default class ProductosComponent {
           descripcion: this.descripcion,
           imagen: imgUrl,
           precio: this.precio.toString(),
+          is_active: true,
+          categoria: Number(this.selectedSubcategoria),
           genero: this.selectedGenero ? Number(this.selectedGenero) : 1,
           editorial: this.selectedEditorial ? Number(this.selectedEditorial) : 1,
           autor: this.selectedAutor ? Number(this.selectedAutor) : 1,
-          subcategoria: Number(this.selectedSubcategoria)
         };
 
-        if (this.selectedSubcategoria === 1) {
+        if (producto.categoria === 1) {
           producto.genero = 1;
           producto.autor = 1;
           producto.editorial = 1;
         }
+
         console.log(producto);
         this.productoService.createProducto(producto).subscribe({
           next: (resp: any) => {

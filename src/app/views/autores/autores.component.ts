@@ -40,12 +40,30 @@ export default class AutoresComponent {
   }
 
   createAutor(): void {
-    if (!this.nuevoAutor.nombre.trim()) return;
+    if (!this.nuevoAutor.nombre.trim()) {
+      Swal.fire("Por favor ingrese el nombre del autor.");
+      return;
+    }
+
+    const autorData = {
+      nombre: this.nuevoAutor.nombre,
+      is_active: true
+    };
 
     this.autorService.createAutor(this.nuevoAutor).subscribe({
       next: (data) => {
         this.autores.push(data);
         this.nuevoAutor = { nombre: '' };
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Autor creado!",
+          showConfirmButton: false,
+          timer: 2500
+        });
+        setTimeout(() => {
+          this.closeRegisterAutorModal();
+        }, 2600);
       },
       error: (error) => {
         console.error('Error al crear un nuevo autor', error);

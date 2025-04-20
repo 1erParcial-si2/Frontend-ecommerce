@@ -81,11 +81,9 @@ export default class LoginComponent {
       password: this.password,
       email: this.email,
       telefono: this.telefono,
-      direccion: this.direccion,
-      rol: 2
+      direccion: this.direccion
     };
-
-    this.userService.registerUser(user).subscribe(
+    this.userService.registrarCliente(user).subscribe(
       {
         next: (resp: any) => {
           console.log(resp);

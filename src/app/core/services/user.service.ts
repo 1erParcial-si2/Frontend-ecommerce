@@ -17,6 +17,10 @@ export class UserService {
     return this.http.post(this.apiUrl + "usuarios/", user);
   }
 
+  registrarCliente(user: any) {
+    return this.http.post(this.apiUrl + "usuarios/crear-cliente/", user);
+  }
+
   getUsers(): Observable<any> {
     return this.http.get(this.apiUrl + "usuarios/");
   }
