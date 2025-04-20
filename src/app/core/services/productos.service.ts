@@ -29,9 +29,6 @@ export class ProductosService {
     return this.http.put(this.apiUrl + `${productoId}/`, producto);
   }
 
-  // XgetProducto(productoId: any, producto: any): Observable<any> {
-  //   return this.http.get(this.apiUrl + `${productoId}/`, producto);
-  // }
   getProducto(productoId: any): Observable<any> {
     return this.http.get(this.apiUrl + `${productoId}/`);
   }

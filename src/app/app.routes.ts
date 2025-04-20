@@ -28,6 +28,14 @@ export const routes: Routes = [
                 loadComponent: () => import('./views/productos/productos.component')
             },
             {
+                path: 'catalogo',
+                loadComponent: () => import('./views/catalogo/catalogo.component')
+            },
+            {
+                path: 'carrito',
+                loadComponent: () => import('./views/carrito/carrito.component')
+            },
+            {
                 path: 'categorias',
                 loadComponent: () => import('./views/categorias/categorias.component')
             },

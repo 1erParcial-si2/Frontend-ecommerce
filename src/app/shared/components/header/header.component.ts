@@ -1,6 +1,7 @@
 import { Component, HostListener } from '@angular/core';
 import { AuthService } from '../../../core/services/auth.service';
 import { NgIf } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -14,7 +15,7 @@ export class HeaderComponent {
   username: string | null = null;
   user: string | null = null;
 
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService, private router: Router) {
     if (typeof window !== 'undefined') {
       this.user = window.sessionStorage.getItem('user');
       if (this.user) {
@@ -50,6 +51,10 @@ export class HeaderComponent {
 
   irPerfil(): void {
     console.log('Ir al perfil');
+  }
+
+  irAlCarrito(): void {
+    this.router.navigate(['/carrito']);
   }
 
   cerrarSesion() {
