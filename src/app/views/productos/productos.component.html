@@ -32,6 +32,27 @@
                         </th>
                         <th class="border-b border-blue-gray-50 py-3 px-6 text-left">
                             <p class="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">
+                                Stock del Producto</p>
+                        </th>
+
+                        <th class="border-b border-blue-gray-50 py-3 px-6 text-left">
+                            <p class="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">
+                                Categoría</p>
+                        </th>
+                        <th class="border-b border-blue-gray-50 py-3 px-6 text-left">
+                            <p class="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">
+                                Género</p>
+                        </th>
+                        <th class="border-b border-blue-gray-50 py-3 px-6 text-left">
+                            <p class="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">
+                                Autor</p>
+                        </th>
+                        <th class="border-b border-blue-gray-50 py-3 px-6 text-left">
+                            <p class="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">
+                                Editorial</p>
+                        </th>
+                        <th class="border-b border-blue-gray-50 py-3 px-6 text-left">
+                            <p class="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">
                                 Foto del Producto</p>
                         </th>
                         <th class="border-b border-blue-gray-50 py-3 px-6 text-left">
@@ -60,6 +81,28 @@
                             <p class="block antialiased font-sans text-xs font-medium text-blue-gray-600">{{
                                 producto.precio }}</p>
                         </td>
+                        <td class="py-3 px-5 border-b border-blue-gray-50">
+                            <p class="block antialiased font-sans text-xs font-medium text-blue-gray-600">{{
+                                producto.stock }}</p>
+                        </td>
+
+                        <td class="py-3 px-5 border-b border-blue-gray-50">
+                            <p class="block antialiased font-sans text-xs font-medium text-blue-gray-600">{{
+                                categoriasMap[producto.categoria] || 'Sin categoria' }}</p>
+                        </td>
+                        <td class="py-3 px-5 border-b border-blue-gray-50">
+                            <p class="block antialiased font-sans text-xs font-medium text-blue-gray-600">{{
+                                generosMap[producto.genero] || 'Sin genero' }}</p>
+                        </td>
+                        <td class="py-3 px-5 border-b border-blue-gray-50">
+                            <p class="block antialiased font-sans text-xs font-medium text-blue-gray-600">{{
+                                autoresMap[producto.autor] || 'Sin autor' }}</p>
+                        </td>
+                        <td class="py-3 px-5 border-b border-blue-gray-50">
+                            <p class="block antialiased font-sans text-xs font-medium text-blue-gray-600">{{
+                                editorialesMap[producto.editorial] || 'Sin editorial' }}</p>
+                        </td>
+
                         <td class="py-3 px-5 border-b border-blue-gray-50">
                             <img *ngIf="producto.imagen" [src]="producto.imagen" alt="Producto"
                                 class="h-12 w-12 object-cover rounded" />
@@ -133,6 +176,13 @@
                 </div>
 
                 <div>
+                    <label for="stock" class="block text-sm font-medium text-gray-700">Stock del Producto</label>
+                    <input type="number" id="stock" [(ngModel)]="stock" name="stock"
+                        class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                        required />
+                </div>
+
+                <div>
                     <label for="categoria" class="block text-sm font-medium text-gray-700">Categoria</label>
                     <select id="categoria" [(ngModel)]="selectedSubcategoria" name="categoria"
                         class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
@@ -183,7 +233,7 @@
             <!-- </div> -->
         </div>
     </div>
-    <!-- VENTANA EMERGENTE PARA ACTUALIZAR LOS DATOS DE UNO -->
+    <!-- VENTANA EMERGENTE PARA ACTUALIZAR LOS DATOS -->
     <div *ngIf="isModalUpdateProductoOpen"
         class="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50 max-h-[90vh] overflow-y-auto">
         <div class="bg-white rounded-lg shadow-lg w-11/12 sm:w-96 h-full p-6 max-h-[90vh] overflow-y-auto">
@@ -228,6 +278,14 @@
                     <label for="precioUpdate" class="block text-sm font-medium text-gray-700">Precio del
                         Producto</label>
                     <input type="text" id="precioUpdate" [(ngModel)]="precioUpdate" name="precioUpdate"
+                        class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                        required />
+                </div>
+
+                <div>
+                    <label for="stockUpdate" class="block text-sm font-medium text-gray-700">Stock del
+                        Producto</label>
+                    <input type="number" id="stockUpdate" [(ngModel)]="stockUpdate" name="stockUpdate"
                         class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
                         required />
                 </div>

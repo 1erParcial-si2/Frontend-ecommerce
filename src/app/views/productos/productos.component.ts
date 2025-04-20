@@ -29,10 +29,11 @@ export default class ProductosComponent {
   descripcion: any;
   imagen: any;
   precio: any;
-
-  selectedAutor: any = "";
-  selectedGenero: any = "";
-  selectedEditorial: any = "";
+  is_active: boolean = true;
+  stock: number = 0;
+  selectedAutor: any = null;
+  selectedGenero: any = null;
+  selectedEditorial: any = null;
   selectedSubcategoria: any = "";
 
   nombreUpdate: any;
@@ -44,7 +45,13 @@ export default class ProductosComponent {
   editorialUpdate: any;
   subcategoriaUpdate: any;
   productoIdSelected: any;
+  is_activeUpdate: boolean = true;
+  stockUpdate: number = 0;
 
+  categoriasMap: { [key: number]: string } = {};
+  generosMap: { [key: number]: string } = {};
+  autoresMap: { [key: number]: string } = {};
+  editorialesMap: { [key: number]: string } = {};
   previewImageUrl: string | ArrayBuffer | null = null;
   isModalRegisterProductoOpen: boolean = false;
   isModalUpdateProductoOpen: boolean = false;
@@ -98,11 +105,19 @@ export default class ProductosComponent {
     );
   }
 
+  onCategoriaChange() {
+    if (this.selectedSubcategoria == 1) {
+      this.selectedGenero = null;
+      this.selectedEditorial = null;
+      this.selectedAutor = null;
+    }
+  }
 
   getProductos(): void {
     this.productoService.getProductos().subscribe({
       next: (data) => {
         this.productos = data;
+        console.log("Productos recibidos:", this.productos);
       },
       error: (error) => {
         console.error('Error al obtener productos', error);
@@ -112,29 +127,65 @@ export default class ProductosComponent {
 
   getSubcategorias() {
     this.categoriasService.getCategorias().subscribe({
-      next: (resp: any) => this.subcategorias = resp,
-      error: (error: any) => console.log(error)
+      next: (resp: any) => {
+        console.log(resp);
+        this.subcategorias = resp;
+        this.categoriasMap = {};
+        this.subcategorias.forEach((categoria: any) => {
+          this.categoriasMap[categoria.id] = categoria.nombre;
+        });
+      },
+      error: (error: any) => {
+        console.log(error);
+      }
     });
   }
 
   getEditoriales() {
     this.editorialesService.getEditoriales().subscribe({
-      next: (resp: any) => this.editoriales = resp,
-      error: (error: any) => console.log(error)
+      next: (resp: any) => {
+        console.log(resp);
+        this.editoriales = resp;
+        this.editorialesMap = {};
+        this.editoriales.forEach((editorial: any) => {
+          this.editorialesMap[editorial.id] = editorial.nombre;
+        });
+      },
+      error: (error: any) => {
+        console.log(error);
+      }
     });
   }
 
   getAutores() {
     this.autoresService.getAutores().subscribe({
-      next: (resp: any) => this.autores = resp,
-      error: (error: any) => console.log(error)
+      next: (resp: any) => {
+        console.log(resp);
+        this.autores = resp;
+        this.autoresMap = {};
+        this.autores.forEach((autor: any) => {
+          this.autoresMap[autor.id] = autor.nombre;
+        });
+      },
+      error: (error: any) => {
+        console.log(error);
+      }
     });
   }
 
   getGeneros() {
     this.generosService.getGeneros().subscribe({
-      next: (resp: any) => this.generos = resp,
-      error: (error: any) => console.log(error)
+      next: (resp: any) => {
+        console.log(resp);
+        this.generos = resp;
+        this.generosMap = {};
+        this.generos.forEach((genero: any) => {
+          this.generosMap[genero.id] = genero.nombre;
+        });
+      },
+      error: (error: any) => {
+        console.log(error);
+      }
     });
   }
 
@@ -145,24 +196,39 @@ export default class ProductosComponent {
     }
     this.upload().subscribe({
       next: (imgUrl: string) => {
-        const producto = {
+        // const producto = {
+        //   nombre: this.nombre,
+        //   descripcion: this.descripcion,
+        //   imagen: imgUrl,
+        //   precio: this.precio.toString(),
+        //   is_active: true,
+        //   stock: Number(this.stock),
+        //   categoria: Number(this.selectedSubcategoria),
+        //   genero: Number(this.selectedGenero),
+        //   editorial: Number(this.selectedEditorial),
+        //   autor: Number(this.selectedAutor)
+        // };
+        // const producto = {
+        let producto: any = {
           nombre: this.nombre,
           descripcion: this.descripcion,
           imagen: imgUrl,
           precio: this.precio.toString(),
           is_active: true,
-          categoria: Number(this.selectedSubcategoria),
-          genero: this.selectedGenero ? Number(this.selectedGenero) : 1,
-          editorial: this.selectedEditorial ? Number(this.selectedEditorial) : 1,
-          autor: this.selectedAutor ? Number(this.selectedAutor) : 1,
+          stock: Number(this.stock),
+          categoria: Number(this.selectedSubcategoria)
         };
-
-        if (producto.categoria === 1) {
-          producto.genero = 1;
-          producto.autor = 1;
-          producto.editorial = 1;
+        // Si la subcategoría es distinta de 1 (no es accesorio), asignar los valores normalmente
+        if (Number(this.selectedSubcategoria) !== 1) {
+          producto.genero = this.selectedGenero !== "" ? Number(this.selectedGenero) : null;
+          producto.editorial = this.selectedEditorial !== "" ? Number(this.selectedEditorial) : null;
+          producto.autor = this.selectedAutor !== "" ? Number(this.selectedAutor) : null;
+        } else {
+          // Forzar valores null para accesorios
+          producto.genero = null;
+          producto.editorial = null;
+          producto.autor = null;
         }
-
         console.log(producto);
         this.productoService.createProducto(producto).subscribe({
           next: (resp: any) => {
@@ -204,23 +270,10 @@ export default class ProductosComponent {
     });
   }
 
-
   activeRegisterForm() {
     this.isModalRegisterProductoOpen = true;
   }
 
-  XopenModalToUpdateproducto(producto: any) {
-    this.isModalUpdateProductoOpen = true;
-    this.nombreUpdate = producto.nombre;
-    this.descripcionUpdate = producto.descripcion;
-    this.imagenUpdate = producto.imagen;
-    this.precioUpdate = producto.precio;
-    this.generoUpdate = producto.genero.id;
-    this.editorialUpdate = producto.editorial.id;
-    this.autorUpdate = producto.autor.id;
-    this.subcategoriaUpdate = producto.subcategoria?.id || producto.categoria?.id;
-    this.productoIdSelected = producto.id;
-  }
   openModalToUpdateproducto(producto: any) {
     console.log("Producto recibido:", producto);
     if (!producto) {
@@ -236,13 +289,11 @@ export default class ProductosComponent {
     this.selectedGenero = producto.genero?.id || 1;
     this.selectedAutor = producto.autor?.id || 1;
     this.selectedEditorial = producto.editorial?.id || 1;
-
+    this.stockUpdate = producto.stock || 0;
     // Limpiar archivos seleccionados para nueva imagen (si había)
     this.files = [];
     this.isModalUpdateProductoOpen = true;
   }
-
-
 
   updateproducto() {
     // Si se subió una nueva imagen, la subimos primero
@@ -263,21 +314,29 @@ export default class ProductosComponent {
   }
 
   enviarActualizacion(imgUrl: string) {
-    if (this.subcategoriaUpdate === 1) {
-      this.selectedGenero = 1;
-      this.selectedAutor = 1;
-      this.selectedEditorial = 1;
-    }
-
     const productoData = {
+      // nombre: this.nombreUpdate,
+      // descripcion: this.descripcionUpdate,
+      // imagen: imgUrl,
+      // precio: this.precioUpdate,
+      // genero: this.selectedGenero,
+      // editorial: this.selectedEditorial,
+      // autor: this.selectedAutor,
+      // categoria: this.subcategoriaUpdate,
+      // is_active: this.is_activeUpdate,
+      // stock: Number(this.stockUpdate),
       nombre: this.nombreUpdate,
       descripcion: this.descripcionUpdate,
       imagen: imgUrl,
       precio: this.precioUpdate,
-      genero: this.selectedGenero,
-      editorial: this.selectedEditorial,
-      autor: this.selectedAutor,
-      subcategoria: this.subcategoriaUpdate
+      categoria: this.subcategoriaUpdate,
+      is_active: this.is_activeUpdate,
+      stock: Number(this.stockUpdate),
+      ...(this.subcategoriaUpdate !== 1 && {
+        genero: this.selectedGenero,
+        editorial: this.selectedEditorial,
+        autor: this.selectedAutor
+      })
     };
 
     this.productoService.updateProducto(this.productoIdSelected, productoData).subscribe({
