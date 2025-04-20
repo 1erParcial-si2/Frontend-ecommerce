@@ -196,19 +196,6 @@ export default class ProductosComponent {
     }
     this.upload().subscribe({
       next: (imgUrl: string) => {
-        // const producto = {
-        //   nombre: this.nombre,
-        //   descripcion: this.descripcion,
-        //   imagen: imgUrl,
-        //   precio: this.precio.toString(),
-        //   is_active: true,
-        //   stock: Number(this.stock),
-        //   categoria: Number(this.selectedSubcategoria),
-        //   genero: Number(this.selectedGenero),
-        //   editorial: Number(this.selectedEditorial),
-        //   autor: Number(this.selectedAutor)
-        // };
-        // const producto = {
         let producto: any = {
           nombre: this.nombre,
           descripcion: this.descripcion,
@@ -315,16 +302,6 @@ export default class ProductosComponent {
 
   enviarActualizacion(imgUrl: string) {
     const productoData = {
-      // nombre: this.nombreUpdate,
-      // descripcion: this.descripcionUpdate,
-      // imagen: imgUrl,
-      // precio: this.precioUpdate,
-      // genero: this.selectedGenero,
-      // editorial: this.selectedEditorial,
-      // autor: this.selectedAutor,
-      // categoria: this.subcategoriaUpdate,
-      // is_active: this.is_activeUpdate,
-      // stock: Number(this.stockUpdate),
       nombre: this.nombreUpdate,
       descripcion: this.descripcionUpdate,
       imagen: imgUrl,
