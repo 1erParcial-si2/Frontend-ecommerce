@@ -36,6 +36,10 @@ export const routes: Routes = [
                 loadComponent: () => import('./views/carrito/carrito.component')
             },
             {
+                path: 'pago/:id',
+                loadComponent: () => import('./views/pago/pago.component').then(m => m.default)
+            },
+            {
                 path: 'categorias',
                 loadComponent: () => import('./views/categorias/categorias.component')
             },

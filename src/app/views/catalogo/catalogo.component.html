@@ -27,27 +27,25 @@
                         </div>
                         <h3 class="text-base font-medium text-blue-gray-900">Bs. {{ producto.precio }}</h3>
                         <h4 class="text-base font-sans text-gray-900">{{ producto.descripcion }}</h4>
-                        <p class="text-base font-light text-gray-700">Categoría: {{ categoriasMap[producto.categoria] }}
+                        <p class="text-base font-light text-gray-700">
+                            Categoría: {{ producto.categoria || 'Sin categoría' }}
                         </p>
-                        <p class="text-base font-sans text-gray-900">Género: </p>
-                        <p class="text-base font-light text-gray-700"> {{ producto.genero !== null
-                            ?generosMap[producto.genero] : 'Sin género' }}</p>
-                        <p class="text-base font-sans text-gray-900">Autor: </p>
-                        <p class="text-base font-light text-gray-700">{{ producto.autor !== null ?
-                            autoresMap[producto.autor] : 'Sin autor' }}</p>
-                        <p class="text-base font-sans text-gray-900">Editorial: </p>
-                        <p class="text-base font-light text-gray-700">{{ producto.editorial !== null ?
-                            editorialesMap[producto.editorial] : 'Sin editorial' }}</p>
-                        <div class="flex items-center border-gray-100">
-                            <span (click)="disminuirCantidad(producto)"
-                                class="cursor-pointer rounded-l bg-gray-100 py-1 px-3.5 duration-100 hover:bg-blue-500 hover:text-white">
-                                - </span>
-                            <input class="h-8 w-8 border bg-white text-center text-xs outline-none" type="number"
-                                [value]="producto.cantidad" min="1" readonly />
-                            <span (click)="aumentarCantidad(producto)"
-                                class="cursor-pointer rounded-r bg-gray-100 py-1 px-3 duration-100 hover:bg-blue-500 hover:text-white">
-                                + </span>
-                        </div>
+
+                        <p class="text-base font-sans text-gray-900">Género:</p>
+                        <p class="text-base font-light text-gray-700">
+                            {{ producto.genero?.nombre || 'Sin género' }}
+                        </p>
+
+                        <p class="text-base font-sans text-gray-900">Autor:</p>
+                        <p class="text-base font-light text-gray-700">
+                            {{ producto.autor?.nombre || 'Sin autor' }}
+                        </p>
+
+                        <p class="text-base font-sans text-gray-900">Editorial:</p>
+                        <p class="text-base font-light text-gray-700">
+                            {{ producto.editorial?.nombre || 'Sin editorial' }}
+                        </p>
+
                     </div>
                 </div>
             </div>

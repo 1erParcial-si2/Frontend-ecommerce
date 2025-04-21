@@ -19,11 +19,12 @@ interface Producto {
   imagen: string;
   is_active: boolean;
   categoria: number;
-  autor: number | null; // Si puede ser null
-  editorial: number | null; // Si puede ser null
-  genero: number | null; // Si puede ser null
+  autor: { nombre: string } | null; // Ahora es un objeto con nombre o null
+  editorial: { nombre: string } | null; // Ahora es un objeto con nombre o null
+  genero: { nombre: string } | null; // Ahora es un objeto con nombre o null
   cantidad: number; // cantidad en el carrito
 }
+
 
 @Component({
   selector: 'app-catalogo',

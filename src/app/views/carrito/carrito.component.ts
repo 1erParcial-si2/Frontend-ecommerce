@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { CarritoService } from '../../core/services/carrito.service';
 import { DetalleCarritoService } from '../../core/services/detalle-carrito.service';
 import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
 
 interface Producto {
   id: number;
@@ -25,7 +26,7 @@ export default class CarritoComponent implements OnInit {
   carrito: any[] = [];
   carritoId!: number; // Variable para guardar el ID del carrito
   carritoDetalles: any[] = []; // Lista de detalles
-  constructor(private carritoService: CarritoService, private detalleCarritoService: DetalleCarritoService) { }
+  constructor(private carritoService: CarritoService, private detalleCarritoService: DetalleCarritoService, private router: Router) { }
 
   ngOnInit() {
     this.obtenerCarrito();
@@ -105,28 +106,11 @@ export default class CarritoComponent implements OnInit {
     return this.subtotal - this.descuento;
   }
 
-  convertirCarritoEnPedido(): void {
+  redirigirAPago() {
     if (!this.carritoId) {
       console.error('No se encontró el ID del carrito.');
       return;
     }
-
-    const body = { activo: true };
-
-    this.carritoService.convertirPedido(this.carritoId).subscribe({
-      next: (response) => {
-        Swal.fire({
-          position: "center",
-          icon: "success",
-          title: "Pedido generado!",
-          showConfirmButton: false,
-          timer: 2500
-        });
-        console.log('Carrito convertido en pedido:', response);
-      },
-      error: (error) => {
-        console.error('Error al convertir el carrito en pedido:', error);
-      }
-    });
+    this.router.navigate(['/pago', this.carritoId]);
   }
 }
