@@ -201,20 +201,27 @@ export default class ProductosComponent {
           descripcion: this.descripcion,
           imagen: imgUrl,
           precio: this.precio.toString(),
-          is_active: true,
           stock: Number(this.stock),
-          categoria: Number(this.selectedSubcategoria)
+          is_active: true,
+          categoria_id: Number(this.selectedSubcategoria),
+          categoria: { nombre: "", is_active: true }, // puedes poner "" o recuperar el nombre desde la lista
+          genero_id: null,
+          genero: null,
+          editorial_id: null,
+          editorial: null,
+          autor_id: null,
+          autor: null
         };
         // Si la subcategoría es distinta de 1 (no es accesorio), asignar los valores normalmente
-        if (Number(this.selectedSubcategoria) !== 1) {
-          producto.genero = this.selectedGenero !== "" ? Number(this.selectedGenero) : null;
-          producto.editorial = this.selectedEditorial !== "" ? Number(this.selectedEditorial) : null;
-          producto.autor = this.selectedAutor !== "" ? Number(this.selectedAutor) : null;
-        } else {
-          // Forzar valores null para accesorios
-          producto.genero = null;
-          producto.editorial = null;
-          producto.autor = null;
+        if (producto.categoria_id !== 1) {
+          producto.genero_id = this.selectedGenero !== "" ? Number(this.selectedGenero) : null;
+          producto.editorial_id = this.selectedEditorial !== "" ? Number(this.selectedEditorial) : null;
+          producto.autor_id = this.selectedAutor !== "" ? Number(this.selectedAutor) : null;
+
+          // puedes obtener el nombre desde tu lista local si quieres, ejemplo:
+          producto.genero = { nombre: this.generosMap[producto.genero_id], is_active: true };
+          producto.editorial = { nombre: this.editorialesMap[producto.editorial_id], is_active: true };
+          producto.autor = { nombre: this.autoresMap[producto.autor_id], is_active: true };
         }
         console.log(producto);
         this.productoService.createProducto(producto).subscribe({
@@ -301,20 +308,48 @@ export default class ProductosComponent {
   }
 
   enviarActualizacion(imgUrl: string) {
-    const productoData = {
+    const categoriaId = Number(this.subcategoriaUpdate);
+
+    const productoData: any = {
       nombre: this.nombreUpdate,
       descripcion: this.descripcionUpdate,
       imagen: imgUrl,
-      precio: this.precioUpdate,
-      categoria: this.subcategoriaUpdate,
-      is_active: this.is_activeUpdate,
+      precio: this.precioUpdate.toString(),
       stock: Number(this.stockUpdate),
-      ...(this.subcategoriaUpdate !== 1 && {
-        genero: this.selectedGenero,
-        editorial: this.selectedEditorial,
-        autor: this.selectedAutor
-      })
+      is_active: this.is_activeUpdate,
+      categoria_id: categoriaId,
+      categoria: {
+        nombre: this.subcategorias[categoriaId] || "",
+        is_active: true
+      },
+      genero_id: null,
+      genero: null,
+      editorial_id: null,
+      editorial: null,
+      autor_id: null,
+      autor: null
     };
+
+    // Solo si NO es accesorio
+    if (categoriaId !== 1) {
+      productoData.genero_id = Number(this.selectedGenero);
+      productoData.genero = {
+        nombre: this.generosMap[productoData.genero_id] || "",
+        is_active: true
+      };
+
+      productoData.editorial_id = Number(this.selectedEditorial);
+      productoData.editorial = {
+        nombre: this.editorialesMap[productoData.editorial_id] || "",
+        is_active: true
+      };
+
+      productoData.autor_id = Number(this.selectedAutor);
+      productoData.autor = {
+        nombre: this.autoresMap[productoData.autor_id] || "",
+        is_active: true
+      };
+    }
 
     this.productoService.updateProducto(this.productoIdSelected, productoData).subscribe({
       next: (resp: any) => {
@@ -336,6 +371,7 @@ export default class ProductosComponent {
       }
     });
   }
+
 
   deleteProducto(producto: any) {
     this.productoService.deleteProducto(producto.id).subscribe({

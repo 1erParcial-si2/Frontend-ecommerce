@@ -7,6 +7,7 @@ import { GenerosService } from '../../core/services/generos.service';
 import { CategoriasService } from '../../core/services/categorias.service';
 import { EditorialesService } from '../../core/services/editoriales.service';
 import { CarritoService } from '../../core/services/carrito.service';
+import { DetalleCarritoService } from '../../core/services/detalle-carrito.service';
 import Swal from 'sweetalert2';
 
 interface Producto {
@@ -21,6 +22,7 @@ interface Producto {
   autor: number | null; // Si puede ser null
   editorial: number | null; // Si puede ser null
   genero: number | null; // Si puede ser null
+  cantidad: number; // cantidad en el carrito
 }
 
 @Component({
@@ -47,7 +49,8 @@ export default class CatalogoComponent implements OnInit {
     private generosService: GenerosService,
     private editorialesService: EditorialesService,
     private categoriasService: CategoriasService,
-    private carritoService: CarritoService) { }
+    private carritoService: CarritoService,
+    private detalleCarritoService: DetalleCarritoService) { }
 
   ngOnInit() {
     this.getProductos();
@@ -55,6 +58,7 @@ export default class CatalogoComponent implements OnInit {
     this.getGeneros();
     this.getEditoriales();
     this.getSubcategorias();
+    this.obtenerCarritoActivo();
   }
 
   getProductos(): void {
@@ -133,6 +137,16 @@ export default class CatalogoComponent implements OnInit {
     });
   }
 
+  aumentarCantidad(producto: Producto) {
+    producto.cantidad++;
+  }
+
+  disminuirCantidad(producto: Producto) {
+    if (producto.cantidad > 1) {
+      producto.cantidad--;
+    }
+  }
+
   filtrarProductos(): void {
     // Filtramos los productos dependiendo del rol
     if (this.isAdmin) {
@@ -140,27 +154,53 @@ export default class CatalogoComponent implements OnInit {
       this.productosFiltrados = this.productos;
     } else {
       // Si no es administrador, mostramos solo los productos activos
-      this.productosFiltrados = this.productos.filter(producto => producto.is_active);
+      // this.productosFiltrados = this.productos.filter(producto => producto.is_active);
+      this.productos = this.productos.filter(producto => producto.is_active).map(producto => ({
+        ...producto,
+        cantidad: 1
+      }));
     }
   }
 
-  agregarAlCarrito(producto: Producto): void {
-    const productoCarrito = {
-      id: producto.id,
-      nombre: producto.nombre,
-      descripcion: producto.descripcion,
-      precio: Number(producto.precio),
-      imagen: producto.imagen,
-      cantidad: 1
+  agregarProducto(producto: Producto): void {
+    const detalle = {
+      producto_id: producto.id,
+      cantidad: producto.cantidad || 1
     };
-    this.carritoService.agregarProducto(productoCarrito);
-    // alert(`"${producto.nombre}" fue añadido al carrito.`);
-    Swal.fire({
-      position: "center",
-      icon: "success",
-      title: "Producto agregado al carrito!",
-      showConfirmButton: false,
-      timer: 1000
+
+    this.detalleCarritoService.agregarProducto(detalle).subscribe({
+      next: () => {
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Producto agregado al carrito!",
+          showConfirmButton: false,
+          timer: 1000
+        });
+      },
+      error: (error) => {
+        console.error('Error al agregar producto:', error);
+      }
+    });
+  }
+
+
+  obtenerCarritoActivo(): void {
+    this.carritoService.getCarritos().subscribe({
+      next: (carritos: any[]) => {
+        const carritosActivos = carritos.filter(c => c.estado === 'ACTIVO');
+        if (carritosActivos.length > 0) {
+          // Tomamos el más reciente (mayor ID)
+          const carritoMasReciente = carritosActivos.reduce((a, b) => a.id > b.id ? a : b);
+          localStorage.setItem('carritoActivo', JSON.stringify({ id: carritoMasReciente.id }));
+          console.log('Carrito activo:', carritoMasReciente.id);
+        } else {
+          console.warn('No hay carritos activos.');
+        }
+      },
+      error: (error) => {
+        console.error('Error al obtener carritos:', error);
+      }
     });
   }
 }

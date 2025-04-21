@@ -88,20 +88,24 @@
 
                         <td class="py-3 px-5 border-b border-blue-gray-50">
                             <p class="block antialiased font-sans text-xs font-medium text-blue-gray-600">{{
-                                categoriasMap[producto.categoria] || 'Sin categoria' }}</p>
+                                producto.categoria.nombre || 'Sin categoria' }}</p>
                         </td>
                         <td class="py-3 px-5 border-b border-blue-gray-50">
-                            <p class="block antialiased font-sans text-xs font-medium text-blue-gray-600">{{
-                                generosMap[producto.genero] || 'Sin genero' }}</p>
+                            <p class="block antialiased font-sans text-xs font-medium text-blue-gray-600">
+                                {{ producto.genero?.nombre || 'Sin género' }}
+                            </p>
                         </td>
                         <td class="py-3 px-5 border-b border-blue-gray-50">
-                            <p class="block antialiased font-sans text-xs font-medium text-blue-gray-600">{{
-                                autoresMap[producto.autor] || 'Sin autor' }}</p>
+                            <p class="block antialiased font-sans text-xs font-medium text-blue-gray-600">
+                                {{ producto.autor?.nombre || 'Sin autor' }}
+                            </p>
                         </td>
                         <td class="py-3 px-5 border-b border-blue-gray-50">
-                            <p class="block antialiased font-sans text-xs font-medium text-blue-gray-600">{{
-                                editorialesMap[producto.editorial] || 'Sin editorial' }}</p>
+                            <p class="block antialiased font-sans text-xs font-medium text-blue-gray-600">
+                                {{ producto.editorial?.nombre || 'Sin editorial' }}
+                            </p>
                         </td>
+
 
                         <td class="py-3 px-5 border-b border-blue-gray-50">
                             <img *ngIf="producto.imagen" [src]="producto.imagen" alt="Producto"
