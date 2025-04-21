@@ -18,7 +18,7 @@ interface Producto {
   stock: number;
   imagen: string;
   is_active: boolean;
-  categoria: number;
+  categoria: { nombre: string } | null;
   autor: { nombre: string } | null; // Ahora es un objeto con nombre o null
   editorial: { nombre: string } | null; // Ahora es un objeto con nombre o null
   genero: { nombre: string } | null; // Ahora es un objeto con nombre o null
