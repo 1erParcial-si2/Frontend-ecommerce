@@ -58,7 +58,7 @@ export default class PagoComponent {
         });
 
         setTimeout(() => {
-          this.router.navigate(['/']); // Redirige a inicio o historial
+          this.router.navigate(['/catalogo']); // Redirige a inicio o historial
         }, 2500);
       },
       error: (error) => {
